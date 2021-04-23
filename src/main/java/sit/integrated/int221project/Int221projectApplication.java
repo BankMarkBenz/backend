@@ -5,15 +5,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication
 @RestController
+@SpringBootApplication
 public class Int221projectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(Int221projectApplication.class, args);
     }
-    @GetMapping("/")
-    public String hello(){
-        return "hello";
+    @GetMapping("/health")
+    public String Gethealth(){
+        return "Backend Service is Health";
     }
 }
