@@ -9,8 +9,8 @@ import javax.persistence.Id;
 @Entity
 public class Brands {
     @Id
-    @Getter @Column(name = "brand_id")
+    @Getter @Column(name = "brandId")
     private String BrandId;
-    @Getter @Column(name = "brand_name")
+    @Getter @Column(name = "brandName")
     private String BrandName;
 }

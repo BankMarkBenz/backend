@@ -9,10 +9,10 @@ import javax.persistence.Id;
 @Entity
 public class Colors {
     @Id
-    @Getter @Column(name = "color_id")
+    @Getter @Column(name = "colorId")
     private String ColorId;
-    @Getter @Column(name = "color_name")
+    @Getter @Column(name = "colorName")
     private String ColorName;
-    @Getter @Column(name = "color_value")
+    @Getter @Column(name = "colorValue")
     private String ColorValue;
 }
