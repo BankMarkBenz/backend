@@ -7,7 +7,7 @@ COPY src /workspace/src
 RUN mvn -f pom.xml clean package
 
 ### STAGE 2: Run ###
-FROM openjdk:11-alpine
+FROM openjdk:11.0.11-9-jdk
 COPY --from=build /workspace/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
