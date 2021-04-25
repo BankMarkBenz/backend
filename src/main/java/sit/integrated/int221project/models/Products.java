@@ -6,10 +6,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Builder
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,7 +22,7 @@ public class Products {
     @Getter @Setter @Column(name = "productPrice")
     private float ProductPrice;
     @Getter @Setter @Column(name = "productManufactureddate")
-    private Date ProductManufactured;
+    private LocalDate ProductManufactured;
     @ManyToOne @JoinColumn(name = "brandId" , nullable = false)
     @Getter @Setter private Brands ProductBrands;
     @ManyToMany(cascade = {
@@ -35,4 +35,16 @@ public class Products {
     )
     @Getter @Setter private List<Colors> ProductColors;
 
+    public Products(int productId, String productName, String productDescription, float productPrice, LocalDate productManufactured, Brands productBrands, List<Colors> productColors) {
+        ProductId = productId;
+        ProductName = productName;
+        ProductDescription = productDescription;
+        ProductPrice = productPrice;
+        ProductManufactured = productManufactured;
+        ProductBrands = productBrands;
+        ProductColors = productColors;
+    }
+    public Products(){
+
+    }
 }
