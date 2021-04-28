@@ -19,7 +19,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/BankMarkBenz/backend:dev
+          tags: ghcr.io/bankmarkbenz/backend:dev
       - name: get-credentials
         uses: google-github-actions/get-gke-credentials@main
         with:
