@@ -50,7 +50,7 @@ spec:
     } // End kubernetes
   } // End agent
     environment {
-    ENV_NAME = "${BRANCH_NAME == "master" ? "uat" : "${BRANCH_NAME}"}"
+    ENV_NAME = "${BRANCH_NAME == "main" ? "uat" : "${BRANCH_NAME}"}"
     SCANNER_HOME = tool 'sonarqube-scanner'
     PROJECT_KEY = "BackEndService"
     PROJECT_NAME = "BackEndService"
@@ -143,18 +143,18 @@ spec:
       } // End steps
     } // End stage
 
-    // ***** Stage Anchore *****
-    stage('Anchore Engine') {
-        steps {
-            container('jnlp') {
-                script {
-                    // dend Docker Image to Anchore Analyzer
-                    writeFile file: 'anchore_images' , text: "ghcr.io/bankhubjar/bookinfo-reviews:${ENV_NAME}"
-                    anchore name: 'anchore_images' , bailOnFail: false
-                } // End script
-            } // End container
-        } // End steps
-    } // End stage
+//     // ***** Stage Anchore *****
+//     stage('Anchore Engine') {
+//         steps {
+//             container('jnlp') {
+//                 script {
+//                     // dend Docker Image to Anchore Analyzer
+//                     writeFile file: 'anchore_images' , text: "ghcr.io/bankhubjar/bookinfo-reviews:${ENV_NAME}"
+//                     anchore name: 'anchore_images' , bailOnFail: false
+//                 } // End script
+//             } // End container
+//         } // End steps
+//     } // End stage
 
     stage('Deploy backend with Helm Chart') {
       steps {
