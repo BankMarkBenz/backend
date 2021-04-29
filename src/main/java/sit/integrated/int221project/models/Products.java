@@ -21,9 +21,9 @@ public class Products {
     private float ProductPrice;
     @Column(name = "productManufactureddate")
     private LocalDate ProductManufactured;
-    @ManyToOne @JoinColumn(name = "brandId" , nullable = false)
+    @ManyToOne @JoinColumn(name = "brandId" , nullable = true)
     private Brands ProductBrands;
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {
+    @OneToMany(fetch = FetchType.EAGER,cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
@@ -31,6 +31,6 @@ public class Products {
         joinColumns = @JoinColumn(name = "productId"),
         inverseJoinColumns = @JoinColumn(name = "colorId")
     )
-    public List<Colors> ProductColors;
+    private List<Colors> ProductColors;
 
 }

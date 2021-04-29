@@ -37,7 +37,7 @@ public class ProductsController {
                     product.setProductManufactured(newProduct.getProductManufactured());
                     product.setProductPrice(newProduct.getProductPrice());
                     product.setProductBrands(newProduct.getProductBrands());
-//                    product.setProductColors(newProduct.getProductColors());
+                    product.setProductColors(newProduct.getProductColors());
                     return ProductsRepository.save(product);
                 })
                 .orElseGet(() -> ProductsRepository.save(newProduct));
