@@ -1,18 +1,21 @@
 package sit.integrated.int221project.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
-public class Colors {
+@Getter
+public class Colors implements Serializable {
     @Id
-    @Getter @Column(name = "colorId")
+    @Column(name = "colorId")
     private String ColorId;
-    @Getter @Column(name = "colorName")
+    @Column(name = "colorName")
     private String ColorName;
-    @Getter @Column(name = "colorValue")
+    @Column(name = "colorValue")
     private String ColorValue;
 }

@@ -1,31 +1,29 @@
 package sit.integrated.int221project.models;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+@Entity @Getter @Setter @Table(name = "Products")
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter @Setter @Column(name = "productId")
+    @Column(name = "productId")
     private int ProductId;
-    @Getter @Setter @Column(name = "productName")
+    @Column(name = "productName")
     private String ProductName;
-    @Getter @Setter @Column(name = "productDescription")
+    @Column(name = "productDescription")
     private String ProductDescription;
-    @Getter @Setter @Column(name = "productPrice")
+    @Column(name = "productPrice")
     private float ProductPrice;
-    @Getter @Setter @Column(name = "productManufactureddate")
+    @Column(name = "productManufactureddate")
     private LocalDate ProductManufactured;
     @ManyToOne @JoinColumn(name = "brandId" , nullable = false)
-    @Getter @Setter private Brands ProductBrands;
-    @ManyToMany(cascade = {
+    private Brands ProductBrands;
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
@@ -33,18 +31,6 @@ public class Products {
         joinColumns = @JoinColumn(name = "productId"),
         inverseJoinColumns = @JoinColumn(name = "colorId")
     )
-    @Getter @Setter private List<Colors> ProductColors;
+    public List<Colors> ProductColors;
 
-    public Products(int productId, String productName, String productDescription, float productPrice, LocalDate productManufactured, Brands productBrands, List<Colors> productColors) {
-        ProductId = productId;
-        ProductName = productName;
-        ProductDescription = productDescription;
-        ProductPrice = productPrice;
-        ProductManufactured = productManufactured;
-        ProductBrands = productBrands;
-        ProductColors = productColors;
-    }
-    public Products(){
-
-    }
 }

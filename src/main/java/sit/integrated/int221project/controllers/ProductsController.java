@@ -19,7 +19,7 @@ public class ProductsController {
     }
 
     @GetMapping("/show/{id}")
-    public Products showProducts(@PathVariable String id){
+    public Products showProducts(@PathVariable int id){
         return ProductsRepository.findById(id).orElse(null);
     }
 
@@ -29,7 +29,7 @@ public class ProductsController {
     }
 
     @PutMapping("/edit/{id}")
-    public Products editProducts(@PathVariable String id,@RequestBody Products newProduct){
+    public Products editProducts(@PathVariable int id,@RequestBody Products newProduct){
         return ProductsRepository.findById(id)
                 .map(product -> {
                     product.setProductName(newProduct.getProductName());
@@ -37,14 +37,14 @@ public class ProductsController {
                     product.setProductManufactured(newProduct.getProductManufactured());
                     product.setProductPrice(newProduct.getProductPrice());
                     product.setProductBrands(newProduct.getProductBrands());
-                    product.setProductColors(newProduct.getProductColors());
+//                    product.setProductColors(newProduct.getProductColors());
                     return ProductsRepository.save(product);
                 })
                 .orElseGet(() -> ProductsRepository.save(newProduct));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteProducts(@PathVariable String id){
+    public void deleteProducts(@PathVariable int id){
         ProductsRepository.deleteById(id);
     }
 }

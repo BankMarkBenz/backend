@@ -7,10 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@Getter
 public class Brands {
     @Id
-    @Getter @Column(name = "brandId")
+    @Column(name = "brandId")
     private String BrandId;
-    @Getter @Column(name = "brandName")
+    @Column(name = "brandName")
     private String BrandName;
 }
