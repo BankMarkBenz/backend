@@ -16,6 +16,7 @@ public class ProductsController {
     @GetMapping("/all")
     public List<Products> listAllProducts(){
         return ProductsRepository.findAll();
+
     }
 
     @GetMapping("/show/{id}")
@@ -29,18 +30,18 @@ public class ProductsController {
     }
 
     @PutMapping("/edit/{id}")
-    public Products editProducts(@PathVariable int id,@RequestBody Products newProduct){
+    public Products editProducts(@PathVariable int id,@RequestBody Products newproduct){
         return ProductsRepository.findById(id)
                 .map(product -> {
-                    product.setProductName(newProduct.getProductName());
-                    product.setProductDescription(newProduct.getProductDescription());
-                    product.setProductManufactured(newProduct.getProductManufactured());
-                    product.setProductPrice(newProduct.getProductPrice());
-                    product.setProductBrands(newProduct.getProductBrands());
-                    product.setProductColors(newProduct.getProductColors());
+                    product.setProductName(newproduct.getProductName());
+                    product.setProductDescription(newproduct.getProductDescription());
+                    product.setProductManufactureddate(newproduct.getProductManufactureddate());
+                    product.setProductPrice(newproduct.getProductPrice());
+                    product.setBrandId(newproduct.getBrandId());
+                    product.setProductColors(newproduct.getProductColors());
                     return ProductsRepository.save(product);
                 })
-                .orElseGet(() -> ProductsRepository.save(newProduct));
+                .orElseGet(() -> ProductsRepository.save(newproduct));
     }
 
     @DeleteMapping("/delete/{id}")
