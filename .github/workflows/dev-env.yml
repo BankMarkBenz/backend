@@ -14,7 +14,6 @@ jobs:
         with:
           host: ${{ secrets.SONARQUBE_HOST }}
           login: ${{ secrets.SONARQUBE_TOKEN }}
-          projectBaseDir: "/src"
           projectKey: "BackEndService"
           projectName: "BackEndService"
           projectVersion: "v1.0.0"
