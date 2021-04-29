@@ -1,6 +1,6 @@
 backend:
   namespace: backend-dev
-  image: ghcr.io/BankMarkBenz/backend
+  image: ghcr.io/bankmarkbenz/backend
   tag: dev
   replicas: 3
   imagePullSecrets: registry

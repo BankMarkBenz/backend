@@ -1,0 +1,6 @@
+services:
+  backend:
+    build: .
+    image: ghcr.io/bankmarkbenz/backend:dev
+    ports:
+      - "8080:8080"
