@@ -8,8 +8,8 @@ backend:
   healthCheckPath: "/health"
 ingress:
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: "/$2"
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   host: bankmarkbenz.xyz
   path: "(/|$)(.*)"
   serviceType: ClusterIP
