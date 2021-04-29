@@ -9,6 +9,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: build code
+        uses: LucaFeger/action-maven-cli@1.1.0
+        with:
+          args: "install"
       - name: SonarQube Scan
         uses: kitabisa/sonarqube-action@v1.1.0
         with:
