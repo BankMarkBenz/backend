@@ -19,7 +19,7 @@ import static java.lang.Integer.parseInt;
 
 @RestController
 @RequestMapping("/image")
-public class ProductImageController {
+public class ProductImageController{
 
     @Autowired
     private ProductsRepository productRepository;
