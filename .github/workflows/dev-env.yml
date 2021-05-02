@@ -34,7 +34,7 @@ jobs:
           push: true
           tags: ghcr.io/bankmarkbenz/backend:dev
   deploy:
-    need: build
+    needs: build
     runs-on: ubuntu-20.04
     steps:
       - name: get-credentials
