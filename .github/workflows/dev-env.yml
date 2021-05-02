@@ -47,3 +47,9 @@ jobs:
           namespace: backend-dev
           chart: k8s/helm
           value-files: k8s/helm-values/values-backend-dev.yaml
+          values: |
+            {
+              "extraEnv": {
+                "COMMIT_SHA": "${{ github.sha }}"
+              }
+            }
