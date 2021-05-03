@@ -4,7 +4,7 @@ on:
     branches:
       - dev
 jobs:
-  deploy-dev:
+  build:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -33,6 +33,12 @@ jobs:
         with:
           push: true
           tags: ghcr.io/bankmarkbenz/backend:dev
+  deploy:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: get-credentials
         uses: google-github-actions/get-gke-credentials@main
         with:
@@ -47,3 +53,9 @@ jobs:
           namespace: backend-dev
           chart: k8s/helm
           value-files: k8s/helm-values/values-backend-dev.yaml
+          values: |
+            {
+              "extraEnv": {
+                "COMMIT_SHA": "${{ github.sha }}"
+              }
+            }

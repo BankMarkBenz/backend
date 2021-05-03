@@ -14,6 +14,6 @@ public class Int221projectApplication {
     }
     @GetMapping("/health")
     public String Health(){
-        return "Backend Service is Health !!";
+        return "Backend Service is running !!";
     }
 }
