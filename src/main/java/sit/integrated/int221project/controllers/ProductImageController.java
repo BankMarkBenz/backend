@@ -26,8 +26,7 @@ public class ProductImageController{
 
     @GetMapping("/get/{id:.+}")
     public ResponseEntity<byte[]> getImage(@PathVariable("id")String id) throws IOException {
-        System.out.println(id);
-        FileInputStream fi = new FileInputStream("picture\\"+id);
+        FileInputStream fi = new FileInputStream("picture"+id);
         byte[] image = fi.readAllBytes();
         fi.close();
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
@@ -35,8 +34,8 @@ public class ProductImageController{
 
     @PostMapping ("/add/{id}")
     public ResponseEntity<Object> fileUpload(@RequestParam("File") MultipartFile file, @PathVariable("id")String id)throws IOException{
-        System.out.println(file.getContentType());
-        File myFile = new File("picture\\" + id);
+        File myFile = new File("picture" + id);
+        System.out.println("1111");
         if(myFile.createNewFile()) {
             FileOutputStream fos = new FileOutputStream(myFile);
             fos.write(file.getBytes());
@@ -46,18 +45,19 @@ public class ProductImageController{
     }
 
     @PutMapping("/edit/{id:.+}")
-    public void changeImage(@RequestParam("File")MultipartFile file,@PathVariable("id")String id)throws IOException {
-        FileOutputStream fos = new FileOutputStream("picture\\"+id);
+    public ResponseEntity<Object> changeImage(@RequestParam("File")MultipartFile file,@PathVariable("id")String id)throws IOException {
+        FileOutputStream fos = new FileOutputStream("picture"+id);
         fos.write(file.getBytes());
         fos.close();
+        return  new ResponseEntity<>("The File Change Successfully", HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id:.+}")
     public void deleteImage(@PathVariable("id")String id){
-        String IdString[] = id.split("\\.(?=[^\\.]+$)");
-        int hasId = parseInt(IdString[0]);
+        String IdString[] = id.split(":");
+        int hasId = parseInt(IdString[1]);
         if (hasFoundId(hasId)){
-            File myFile = new File("picture\\" + id);
+            File myFile = new File("picture" + id);
             myFile.delete();
         }
     }
