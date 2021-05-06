@@ -13,7 +13,7 @@ import sit.integrated.int221project.repositories.ProductsRepository;
 
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
 @RequestMapping("/api/products")
 public class ProductsController {

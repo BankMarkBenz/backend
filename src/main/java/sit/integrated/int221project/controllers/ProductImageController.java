@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
-
+@CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
 @RequestMapping("/image")
 public class ProductImageController{
@@ -28,13 +28,13 @@ public class ProductImageController{
     private ProductsRepository productRepository;
     private FileInputStream fi;
     private FileOutputStream fos;
-    private final static String image_PATH = "./image_resources/";
-    private final static String name = "picture";
-    private final static String commonERROR = "Image Id Not Found";
+    private static final String IMAGEPATH = "./image_resources/";
+    private static final String name = "picture";
+    private static final String commonERROR = "Image Id Not Found";
     @GetMapping("/get/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("id")String id){
         try {
-            fi = new FileInputStream(image_PATH+ name + id+".jpg");
+            fi = new FileInputStream(IMAGEPATH+ name + id+".jpg");
             byte[] image = fi.readAllBytes();
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
         }catch(Exception e){
@@ -49,10 +49,10 @@ public class ProductImageController{
     }
 
     @PostMapping ("/add/{id}")
-    public ResponseEntity<Object> fileUpload(@RequestParam("File") MultipartFile file, @PathVariable("id")String id)throws IOException{
+    public ResponseEntity<Object> fileUpload(@RequestParam("File") MultipartFile file, @PathVariable("id")String id){
         try {
             if (hasFoundId(parseInt(id))) {
-                File myFile = new File(image_PATH +  name + id + Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.')));
+                File myFile = new File(IMAGEPATH +  name + id + Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.')));
                 if (myFile.createNewFile()) {
                     fos = new FileOutputStream(myFile);
                     fos.write(file.getBytes());
@@ -96,7 +96,7 @@ public class ProductImageController{
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object>deleteImage(@PathVariable("id")String id){
     try{
-        File myFile = new File(image_PATH+ name + id+".jpg");
+        File myFile = new File(IMAGEPATH+ name + id+".jpg");
         if(myFile.delete()){
             return new ResponseEntity<>("The File Delete Successfully", HttpStatus.OK);
             }
