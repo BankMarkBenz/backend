@@ -9,19 +9,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-#      - name: build code
-#        uses: LucaFeger/action-maven-cli@1.1.0
-#        with:
-#          args: "clean install"
-#      - run: ls -l
-#      - name: SonarQube Scan
-#        uses: kitabisa/sonarqube-action@v1.1.0
-#        with:
-#          host: ${{ secrets.SONARQUBE_HOST }}
-#          login: ${{ secrets.SONARQUBE_TOKEN }}
-#          projectKey: "BackEndService"
-#          projectName: "BackEndService"
-#          projectVersion: "v1.0.0"
+      - name: build code
+        uses: LucaFeger/action-maven-cli@1.1.0
+        with:
+          args: "clean verify sonar:sonar "
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
