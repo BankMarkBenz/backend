@@ -11,10 +11,10 @@ import java.util.List;
 @RestController
 public class BrandController {
     @Autowired
-    private BrandsRepository BrandsRepository;
+    private BrandsRepository brandsRepository;
 
     @GetMapping("/api/brands")
     public List<Brands> listAllBrands(){
-        return BrandsRepository.findAll();
+        return brandsRepository.findAll();
     }
 }

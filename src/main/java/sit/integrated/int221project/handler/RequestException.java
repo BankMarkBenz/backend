@@ -1,4 +1,4 @@
-package sit.integrated.int221project.Exception;
+package sit.integrated.int221project.handler;
 
 public class RequestException  extends RuntimeException{
     public RequestException(String message){

@@ -11,10 +11,10 @@ import java.util.List;
 @RestController
 public class ColorController {
     @Autowired
-    private ColorsRepository ColorsRepository;
+    private ColorsRepository colorsRepository;
 
     @GetMapping("/api/colors")
     public List<Colors> listAllColors(){
-        return ColorsRepository.findAll();
+        return colorsRepository.findAll();
     }
 }

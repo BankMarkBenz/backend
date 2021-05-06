@@ -13,7 +13,7 @@ public class Int221projectApplication {
         SpringApplication.run(Int221projectApplication.class, args);
     }
     @GetMapping("/health")
-    public String Health(){
+    public String health(){
         return "Backend Service is running !!";
     }
 }

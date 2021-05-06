@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sit.integrated.int221project.Exception.RequestException;
-import sit.integrated.int221project.Exception.ResponseException;
+import sit.integrated.int221project.handler.RequestException;
+import sit.integrated.int221project.handler.Response;
 import sit.integrated.int221project.models.Products;
 import sit.integrated.int221project.repositories.ProductsRepository;
 
@@ -28,11 +28,13 @@ public class ProductImageController{
     private ProductsRepository productRepository;
     private FileInputStream fi;
     private FileOutputStream fos;
-    private final String IMAGE_PATH = "./image_resources/";
+    private final static String image_PATH = "./image_resources/";
+    private final static String name = "picture";
+    private final static String commonERROR = "Image Id Not Found";
     @GetMapping("/get/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("id")String id){
         try {
-            fi = new FileInputStream(IMAGE_PATH+"picture" + id+".jpg");
+            fi = new FileInputStream(image_PATH+ name + id+".jpg");
             byte[] image = fi.readAllBytes();
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
         }catch(Exception e){
@@ -41,9 +43,8 @@ public class ProductImageController{
             try{
                 fi.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Can't close FileInputStream");
             }
-
         }
     }
 
@@ -51,21 +52,21 @@ public class ProductImageController{
     public ResponseEntity<Object> fileUpload(@RequestParam("File") MultipartFile file, @PathVariable("id")String id)throws IOException{
         try {
             if (hasFoundId(parseInt(id))) {
-                File myFile = new File(IMAGE_PATH + "picture" + id + Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".")));
+                File myFile = new File(image_PATH +  name + id + Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.')));
                 if (myFile.createNewFile()) {
                     fos = new FileOutputStream(myFile);
                     fos.write(file.getBytes());
                 }
                 return new ResponseEntity<>("The File Uploaded Successfully", HttpStatus.OK);
             }
-            throw new RequestException("Image Id Not Found");
+            throw new RequestException(commonERROR);
         }catch (Exception e){
-            throw new RequestException("Image Id Not Found");
+            throw new RequestException(commonERROR);
         }finally {
             try{
                 fos.close();
             }catch (Exception e){
-                throw new RequestException("Exception can't Close FileOutput");
+                System.out.println("Exception can't Close FileOutput");
             }
         }
     }
@@ -74,19 +75,19 @@ public class ProductImageController{
     public ResponseEntity<Object> changeImage(@RequestParam("File")MultipartFile file,@PathVariable("id")String id) {
         try{
             if(hasFoundId(parseInt(id))){
-                fos = new FileOutputStream("picture"+id);
+                fos = new FileOutputStream( name+id);
                 fos.write(file.getBytes());
                 fos.close();
                 return  new ResponseEntity<>("The File Change Successfully", HttpStatus.OK);
             }
-            throw new RequestException("Image Id Not Found");
+            throw new RequestException(commonERROR);
         }catch (Exception e){
-            throw new RequestException("Image Id Not Found");
+            throw new RequestException(commonERROR);
         }finally {
             try{
                 fos.close();
             }catch (Exception e){
-                throw new RequestException("Exception can't Close FileOutput");
+                System.out.println("Exception can't Close FileOutput");
             }
         }
 
@@ -94,12 +95,20 @@ public class ProductImageController{
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object>deleteImage(@PathVariable("id")String id){
-
-        File myFile = new File(IMAGE_PATH+"picture" + id+".jpg");
+    try{
+        File myFile = new File(image_PATH+ name + id+".jpg");
         if(myFile.delete()){
             return new ResponseEntity<>("The File Delete Successfully", HttpStatus.OK);
+            }
+        }catch (Exception e){
+            System.out.println(e);
         }
         throw new RequestException("Can't Delete File");
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Response> handleItemNotFoundException(String exception){
+        throw new RequestException(exception);
     }
 
     public boolean hasFoundId(int id){
@@ -111,11 +120,4 @@ public class ProductImageController{
         }
         return false;
     }
-
-    @RequestMapping("/")
-    public ResponseEntity<ResponseException> handleItemNotFoundException(String exception){
-        throw new RequestException(exception);
-    }
-
-
 }

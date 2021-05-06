@@ -20,5 +20,5 @@ public class Products {
     private String brandId;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "ProductColor" , joinColumns = @JoinColumn(name = "productId"), inverseJoinColumns = @JoinColumn(name = "colorId"))
-    private List<Colors> ProductColors;
+    private List<Colors> productColors;
 }

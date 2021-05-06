@@ -1,4 +1,4 @@
-package sit.integrated.int221project.Exception;
+package sit.integrated.int221project.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 
 @AllArgsConstructor
 @Getter
-public class ResponseException {
+public class Response {
     private final String message;
     private final HttpStatus httpStatus;
     private final ZonedDateTime timestamp;

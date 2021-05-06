@@ -1,6 +1,5 @@
 package sit.integrated.int221project.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
 import javax.persistence.*;
