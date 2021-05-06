@@ -66,13 +66,9 @@ public class ProductsController {
 
     @DeleteMapping("/delete/{id}")
     public void deleteProducts(@PathVariable int id) {
-        try {
-            ProductsRepository.deleteById(id);
             ProductImageController w = new ProductImageController();
             w.deleteImage(Integer.toString(id));
-        }catch(Exception e){
-            handleItemNotFoundException("Not Found Item");
-        }
+            ProductsRepository.deleteById(id);
     }
 
     @RequestMapping("/")

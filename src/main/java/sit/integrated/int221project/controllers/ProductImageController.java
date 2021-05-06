@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
 
@@ -25,59 +26,86 @@ public class ProductImageController{
 
     @Autowired
     private ProductsRepository productRepository;
+    private FileInputStream fi;
+    private FileOutputStream fos;
     private final String IMAGE_PATH = "./image_resources/";
     @GetMapping("/get/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("id")String id){
-        System.out.println(id);
         try {
-            FileInputStream fi = new FileInputStream(IMAGE_PATH+"picture" + id+".jpg");
+            fi = new FileInputStream(IMAGE_PATH+"picture" + id+".jpg");
             byte[] image = fi.readAllBytes();
-            fi.close();
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
         }catch(Exception e){
            throw new RequestException("Image not Found");
+        }finally{
+            try{
+                fi.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
     @PostMapping ("/add/{id}")
     public ResponseEntity<Object> fileUpload(@RequestParam("File") MultipartFile file, @PathVariable("id")String id)throws IOException{
-        if(hasFoundId(parseInt(id))== false){
+        try {
+            if (hasFoundId(parseInt(id))) {
+                File myFile = new File(IMAGE_PATH + "picture" + id + Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".")));
+                if (myFile.createNewFile()) {
+                    fos = new FileOutputStream(myFile);
+                    fos.write(file.getBytes());
+                }
+                return new ResponseEntity<>("The File Uploaded Successfully", HttpStatus.OK);
+            }
             throw new RequestException("Image Id Not Found");
+        }catch (Exception e){
+            throw new RequestException("Image Id Not Found");
+        }finally {
+            try{
+                fos.close();
+            }catch (Exception e){
+                throw new RequestException("Exception can't Close FileOutput");
+            }
         }
-        File myFile = new File(IMAGE_PATH+"picture" + id +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
-        if(myFile.createNewFile()) {
-            FileOutputStream fos = new FileOutputStream(myFile);
-            fos.write(file.getBytes());
-            fos.close();
-        }
-        return  new ResponseEntity<>("The File Uploaded Successfully", HttpStatus.OK);
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Object> changeImage(@RequestParam("File")MultipartFile file,@PathVariable("id")String id)throws IOException {
-        if(hasFoundId(parseInt(id))== false){
+    public ResponseEntity<Object> changeImage(@RequestParam("File")MultipartFile file,@PathVariable("id")String id) {
+        try{
+            if(hasFoundId(parseInt(id))){
+                fos = new FileOutputStream("picture"+id);
+                fos.write(file.getBytes());
+                fos.close();
+                return  new ResponseEntity<>("The File Change Successfully", HttpStatus.OK);
+            }
             throw new RequestException("Image Id Not Found");
+        }catch (Exception e){
+            throw new RequestException("Image Id Not Found");
+        }finally {
+            try{
+                fos.close();
+            }catch (Exception e){
+                throw new RequestException("Exception can't Close FileOutput");
+            }
         }
-        FileOutputStream fos = new FileOutputStream("picture"+id);
-        fos.write(file.getBytes());
-        fos.close();
-        return  new ResponseEntity<>("The File Change Successfully", HttpStatus.OK);
+
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteImage(@PathVariable("id")String id){
-        String IdString[] = id.split(":");
-        int hasId = parseInt(IdString[1]);
-        if (hasFoundId(hasId)){
-            File myFile = new File("picture" + id);
-            myFile.delete();
+    public ResponseEntity<Object>deleteImage(@PathVariable("id")String id){
+
+        File myFile = new File(IMAGE_PATH+"picture" + id+".jpg");
+        if(myFile.delete()){
+            return new ResponseEntity<>("The File Delete Successfully", HttpStatus.OK);
         }
+        throw new RequestException("Can't Delete File");
     }
 
     public boolean hasFoundId(int id){
         List<Products> products = productRepository.findAll();
-        for (int i = 0; i < products.size(); i++) {
-            if(products.get(i).getProductId() == id){
+        for (Products product : products) {
+            if (product.getProductId() == id) {
                 return true;
             }
         }
