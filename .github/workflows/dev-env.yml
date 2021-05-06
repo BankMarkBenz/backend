@@ -12,7 +12,12 @@ jobs:
       - name: build code
         uses: LucaFeger/action-maven-cli@1.1.0
         with:
-          args: "clean verify sonar:sonar -Dsonar.host.url=http://sonarqube.bankmarkbenz.xyz/ -Dsonar.login=0b41f4d16813358a48b4f3cab1af519e0c6b9443 -Dsonar.projectKey=BackEndService -Dsonar.projectName=BackEndService -Dsonar.java.binaries=."
+          args: "clean verify sonar:sonar\
+          -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }}\
+          -Dsonar.login=${{ secrets.SONARQUBE_HOST }}\
+          -Dsonar.projectKey=${{ secrets.SONARQUBE_PROJECTKEY }}\
+          -Dsonar.projectName=${{ secrets.SONARQUBE_PROJECTKEY }}\
+          -Dsonar.java.binaries=."
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
