@@ -25,14 +25,15 @@ public class ProductImageController{
 
     @Autowired
     private ProductsRepository productRepository;
-
+    private final String IMAGE_PATH = "./image_resources/";
     @GetMapping("/get/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("id")String id){
+        System.out.println(id);
         try {
-            FileInputStream fi = new FileInputStream("picture" + id);
+            FileInputStream fi = new FileInputStream(IMAGE_PATH+"picture" + id+".jpg");
             byte[] image = fi.readAllBytes();
             fi.close();
-            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
         }catch(Exception e){
            throw new RequestException("Image not Found");
         }
@@ -43,7 +44,7 @@ public class ProductImageController{
         if(hasFoundId(parseInt(id))== false){
             throw new RequestException("Image Id Not Found");
         }
-        File myFile = new File("picture" + id);
+        File myFile = new File(IMAGE_PATH+"picture" + id +file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
         if(myFile.createNewFile()) {
             FileOutputStream fos = new FileOutputStream(myFile);
             fos.write(file.getBytes());

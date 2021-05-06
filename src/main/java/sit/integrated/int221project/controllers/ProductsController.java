@@ -1,6 +1,9 @@
 package sit.integrated.int221project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +12,11 @@ import sit.integrated.int221project.Exception.ResponseException;
 import sit.integrated.int221project.models.Products;
 import sit.integrated.int221project.repositories.ProductsRepository;
 
+import sit.integrated.int221project.controllers.ProductImageController;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/products")
@@ -18,16 +25,21 @@ public class ProductsController {
     private ProductsRepository ProductsRepository;
 
     @GetMapping("/all")
-    public List<Products> listAllProducts(){
-        return ProductsRepository.findAll();
-
+    public List<Products> listAllProducts(@RequestParam Optional<Integer> page,
+                                          @RequestParam Optional<String> sortBy){
+        Page<Products> plist = ProductsRepository.findAll(PageRequest.of(
+                page.orElse(0),
+                8,
+                Sort.Direction.ASC,
+                sortBy.orElse("productId")));
+        List<Products> llist = plist.getContent();
+        return llist;
     }
 
     @GetMapping("/show/{id}")
-    public Products showProducts(@PathVariable int id) throws RequestException{
+    public Products showProducts(@PathVariable int id) {
         if( ProductsRepository.findById(id).orElse(null) == null){
-            handleItemNotFoundException("Not Found Product");
-            return null;
+            throw new RequestException("Not Found Id");
         }
         return ProductsRepository.findById(id).orElse(null);
     }
@@ -56,6 +68,8 @@ public class ProductsController {
     public void deleteProducts(@PathVariable int id) {
         try {
             ProductsRepository.deleteById(id);
+            ProductImageController w = new ProductImageController();
+            w.deleteImage(Integer.toString(id));
         }catch(Exception e){
             handleItemNotFoundException("Not Found Item");
         }

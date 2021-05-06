@@ -15,7 +15,6 @@ public class HandlerAppException {
     @ExceptionHandler(value = {RequestException.class})
     public ResponseEntity<Object> handleException(RequestException e){
         HttpStatus notFound = HttpStatus.NOT_FOUND;
-
         ResponseException re = new ResponseException(
                 e.getMessage(),
                 notFound,
