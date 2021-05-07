@@ -9,13 +9,8 @@ import sit.integrated.int221project.repositories.ProductsRepository;
 @SpringBootTest
 class Int221projectApplicationTests {
 
-    private ProductsRepository productsRepository;
-    private ColorsRepository colorsRepository;
-
     @Test
     void contextLoads() {
-        Assert.notEmpty(productsRepository.findAll());
-        Assert.notEmpty(colorsRepository.findAll());
     }
 
 }
