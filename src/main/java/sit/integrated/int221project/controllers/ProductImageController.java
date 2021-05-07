@@ -40,6 +40,7 @@ public class ProductImageController{
         }catch(Exception e){
             System.out.println(e);
             System.out.println(e.getMessage());
+            e.printStackTrace(System.out);
            throw new RequestException("Image not Found");
         }finally{
             try{
@@ -57,6 +58,7 @@ public class ProductImageController{
         try {
             if (hasFoundId(parseInt(id))) {
                 File myFile = new File(IMAGEPATH +  name + id + Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.')));
+                myFile.getParentFile().mkdirs();
                 if (myFile.createNewFile()) {
                     fos = new FileOutputStream(myFile);
                     fos.write(file.getBytes());
