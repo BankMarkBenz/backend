@@ -38,11 +38,15 @@ public class ProductImageController{
             byte[] image = fi.readAllBytes();
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
         }catch(Exception e){
+            System.out.println(e);
+            System.out.println(e.getMessage());
            throw new RequestException("Image not Found");
         }finally{
             try{
                 fi.close();
             } catch (IOException e) {
+                System.out.println(e);
+                System.out.println(e.getMessage());
                 System.out.println("Can't close FileInputStream");
             }
         }
@@ -62,7 +66,8 @@ public class ProductImageController{
             System.out.println("Id not found");
             throw new RequestException(commonERROR);
         }catch (Exception e){
-            System.out.println("Hellotest = error = "+e);
+            System.out.println(e);
+            System.out.println(e.getMessage());
             throw new RequestException(commonERROR);
         }finally {
             try{
@@ -84,11 +89,15 @@ public class ProductImageController{
             }
             throw new RequestException(commonERROR);
         }catch (Exception e){
+            System.out.println(e);
+            System.out.println(e.getMessage());
             throw new RequestException(commonERROR);
         }finally {
             try{
                 fos.close();
             }catch (Exception e){
+                System.out.println(e);
+                System.out.println(e.getMessage());
                 System.out.println("Exception can't Close FileOutput");
             }
         }
