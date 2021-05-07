@@ -62,7 +62,7 @@ public class ProductImageController{
             System.out.println("Id not found");
             throw new RequestException(commonERROR);
         }catch (Exception e){
-            System.out.println(e);
+            System.out.println("Hellotest = error = "+e);
             throw new RequestException(commonERROR);
         }finally {
             try{
