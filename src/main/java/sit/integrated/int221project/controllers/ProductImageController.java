@@ -59,14 +59,16 @@ public class ProductImageController{
                 }
                 return new ResponseEntity<>("The File Uploaded Successfully", HttpStatus.OK);
             }
+            System.out.println("Id not found");
             throw new RequestException(commonERROR);
         }catch (Exception e){
+            System.out.println(e);
             throw new RequestException(commonERROR);
         }finally {
             try{
                 fos.close();
             }catch (Exception e){
-                System.out.println("Exception can't Close FileOutput");
+                System.out.println(e);
             }
         }
     }
