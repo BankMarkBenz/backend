@@ -28,7 +28,7 @@ public class ProductImageController{
     private ProductsRepository productRepository;
     private FileInputStream fi;
     private FileOutputStream fos;
-    private static final String IMAGEPATH = "./image_resources/";
+    private static final String IMAGEPATH = "./src/image_resources/";
     private static final String name = "picture";
     private static final String commonERROR = "Image Id Not Found";
     @GetMapping("/get/{id}")
