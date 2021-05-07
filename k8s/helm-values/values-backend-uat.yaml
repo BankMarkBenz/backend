@@ -2,7 +2,7 @@ backend:
   namespace: backend-uat
   image: ghcr.io/BankMarkBenz/backend
   tag: uat
-  replicas: 3
+  replicas: 1
   imagePullSecrets: registry
   port: 8080
   healthCheckPath: "/health"

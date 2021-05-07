@@ -2,7 +2,7 @@ backend:
   namespace: backend-dev
   image: ghcr.io/bankmarkbenz/backend
   tag: dev
-  replicas: 3
+  replicas: 1
   imagePullSecrets: registry
   port: 8080
   healthCheckPath: "/health"
