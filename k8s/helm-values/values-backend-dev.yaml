@@ -10,7 +10,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-  host: dev.bankmarkbenz.xyz
+  host: dev.bankandmark.codes
   path: "/backend(/|$)(.*)"
   serviceType: ClusterIP
 extraEnv:
