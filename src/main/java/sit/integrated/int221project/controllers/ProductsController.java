@@ -13,6 +13,8 @@ import sit.integrated.int221project.repositories.ProductsRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
 @RequestMapping("/api/products")
@@ -65,6 +67,19 @@ public class ProductsController {
             image.deleteImage(Integer.toString(id));
             productsRepository.deleteById(id);
     }
+
+    @GetMapping("/last")
+    public List<Products> getLastProducts(){
+       return productsRepository.findTopByOrderByProductIdDesc().stream().collect(Collectors.toList());
+    }
+
+    @GetMapping("/getAllName")
+    public List<String> getAllProductName(){
+        return productsRepository.findAll().stream()
+                .map(products -> products.getProductName())
+                .collect(Collectors.toList());
+    }
+
 
     @GetMapping("/")
     public ResponseEntity<Response> handleItemNotFoundException(String exception){
