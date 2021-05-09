@@ -11,6 +11,7 @@ import sit.integrated.int221project.handler.Response;
 import sit.integrated.int221project.models.Products;
 import sit.integrated.int221project.repositories.ProductsRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,10 +75,8 @@ public class ProductsController {
     }
 
     @GetMapping("/getAllName")
-    public List<String> getAllProductName(){
-        return productsRepository.findAll().stream()
-                .map(products -> products.getProductName())
-                .collect(Collectors.toList());
+    public List<Object> getAllProductName(){
+        return productsRepository.getProductIdAndProductName();
     }
 
 
