@@ -33,6 +33,6 @@ jobs:
       - name: Pull and push tagged Docker Image
         uses: akhilerm/tag-push-action@v1.0.0
         with:
-          src: ghcr.io/bankmarkbenz/backend:dev
+          src: ghcr.io/bankmarkbenz/backend:uat
           dst: |
             ghcr.io/bankmarkbenz/backend:${{needs.git-tag.outputs.tag-version}}
