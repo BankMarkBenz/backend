@@ -27,6 +27,9 @@ jobs:
           value-files: k8s/helm-values/values-backend-prd.yaml
           values: |
             {
+              "backend": {
+                "tag": "${{ github.event.inputs.deploy-version }}"
+              },
               "extraEnv": {
                 "COMMIT_SHA": "${{ github.sha }}"
               }
