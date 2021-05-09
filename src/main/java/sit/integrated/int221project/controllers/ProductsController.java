@@ -1,50 +1,88 @@
 package sit.integrated.int221project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sit.integrated.int221project.handler.RequestException;
+import sit.integrated.int221project.handler.Response;
 import sit.integrated.int221project.models.Products;
 import sit.integrated.int221project.repositories.ProductsRepository;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
 @RequestMapping("/api/products")
 public class ProductsController {
     @Autowired
-    private ProductsRepository ProductsRepository;
+    private ProductsRepository productsRepository;
 
     @GetMapping("/all")
-    public List<Products> listAllProducts(){
-        return ProductsRepository.findAll();
+    public List<Products> listAllProducts(@RequestParam Optional<Integer> page,
+                                          @RequestParam Optional<String> sortBy){
+        Page<Products> list = productsRepository.findAll(PageRequest.of(
+                page.orElse(0),
+                8,
+                Sort.Direction.ASC,
+                sortBy.orElse("productId")));
+        return list.getContent();
     }
 
     @GetMapping("/show/{id}")
-    public Products showProducts(@PathVariable String id){
-        return ProductsRepository.findById(id).orElse(null);
+    public Products showProducts(@PathVariable int id) {
+        if( productsRepository.findById(id).orElse(null) == null){
+            throw new RequestException("Not Found Id");
+        }
+        return productsRepository.findById(id).orElse(null);
     }
 
     @PostMapping("/add")
     public Products addProducts(@RequestBody Products product){
-        return ProductsRepository.save(product);
+        return productsRepository.save(product);
     }
 
     @PutMapping("/edit/{id}")
-    public Products editProducts(@PathVariable String id,@RequestBody Products newProduct){
-        return ProductsRepository.findById(id)
+    public Products editProducts(@PathVariable int id,@RequestBody Products newproduct) throws RequestException{
+        return productsRepository.findById(id)
                 .map(product -> {
-                    product.setProductName(newProduct.getProductName());
-                    product.setProductDescription(newProduct.getProductDescription());
-                    product.setProductManufactured(newProduct.getProductManufactured());
-                    product.setProductPrice(newProduct.getProductPrice());
-                    product.setProductBrands(newProduct.getProductBrands());
-                    product.setProductColors(newProduct.getProductColors());
-                    return ProductsRepository.save(product);
+                    product.setProductName(newproduct.getProductName());
+                    product.setProductDescription(newproduct.getProductDescription());
+                    product.setProductManufactureddate(newproduct.getProductManufactureddate());
+                    product.setProductPrice(newproduct.getProductPrice());
+                    product.setBrandId(newproduct.getBrandId());
+                    product.setProductColors(newproduct.getProductColors());
+                    return productsRepository.save(product);
                 })
-                .orElseGet(() -> ProductsRepository.save(newProduct));
+                .orElseGet(() -> productsRepository.save(newproduct));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteProducts(@PathVariable String id){
-        ProductsRepository.deleteById(id);
+    public void deleteProducts(@PathVariable int id) {
+            ProductImageController image = new ProductImageController();
+            image.deleteImage(Integer.toString(id));
+            productsRepository.deleteById(id);
     }
+
+    @GetMapping("/last")
+    public List<Products> getLastProducts(){
+       return productsRepository.findTopByOrderByProductIdDesc().stream().collect(Collectors.toList());
+    }
+
+    @GetMapping("/getAllName")
+    public List<Object> getAllProductName(){
+        return productsRepository.getProductIdAndProductName();
+    }
+
+
+    @GetMapping("/")
+    public ResponseEntity<Response> handleItemNotFoundException(String exception){
+        throw new RequestException(exception);
+    }
+
 }

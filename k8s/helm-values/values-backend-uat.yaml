@@ -2,7 +2,7 @@ backend:
   namespace: backend-uat
   image: ghcr.io/BankMarkBenz/backend
   tag: uat
-  replicas: 3
+  replicas: 1
   imagePullSecrets: registry
   port: 8080
   healthCheckPath: "/health"
@@ -10,6 +10,8 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-  host: bankmarkbenz.xyz
-  path: "(/|$)(.*)"
+  host: bankandmark.codes
+  path: "/backend(/|$)(.*)"
   serviceType: ClusterIP
+extraEnv:
+  COMMIT_SHA: CHANGEME

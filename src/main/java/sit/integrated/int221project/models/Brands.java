@@ -2,15 +2,13 @@ package sit.integrated.int221project.models;
 
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Getter
 public class Brands {
     @Id
-    @Getter @Column(name = "brandId")
-    private String BrandId;
-    @Getter @Column(name = "brandName")
-    private String BrandName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String brandId;
+    private String brandName;
 }

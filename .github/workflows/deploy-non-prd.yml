@@ -1,0 +1,62 @@
+name: deploy-non-prd
+on:
+  push:
+    branches:
+      - dev
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set env
+        run: echo "ENV_NAME=$( [ "$GITHUB_REF" == "refs/heads/main" ] && echo 'uat' || echo ${GITHUB_REF##*/} )" >> $GITHUB_ENV
+      - name: build code
+        uses: LucaFeger/action-maven-cli@1.1.0
+        with:
+          args: "clean verify sonar:sonar \
+          -Dsonar.host.url=http://${{ secrets.SONARQUBE_HOST }} \
+          -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} \
+          -Dsonar.projectKey=${{ secrets.SONARQUBE_PROJECTKEY }} \
+          -Dsonar.projectName=${{ secrets.SONARQUBE_PROJECTKEY }} \
+          -Dsonar.java.binaries=."
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ghcr.io/bankmarkbenz/backend:${{ env.ENV_NAME }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set env
+        run: echo "ENV_NAME=$( [ "$GITHUB_REF" == "refs/heads/master" ] && echo 'uat' || echo ${GITHUB_REF##*/} )" >> $GITHUB_ENV
+      - name: get-credentials
+        uses: google-github-actions/get-gke-credentials@main
+        with:
+          cluster_name: bankmarkbenz-cluster
+          location: asia-east1-a
+          credentials: ${{ secrets.GKE_CREDENTIALS }}
+      - name: deploy
+        uses: "deliverybot/helm@v1"
+        with:
+          helm: helm3
+          release: backend-${{ env.ENV_NAME }}-service
+          namespace: backend-${{ env.ENV_NAME }}
+          chart: k8s/helm
+          value-files: k8s/helm-values/values-backend-${{ env.ENV_NAME }}.yaml
+          values: |
+            {
+              "extraEnv": {
+                "COMMIT_SHA": "${{ github.sha }}"
+              }
+            }

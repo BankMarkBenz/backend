@@ -1,0 +1,17 @@
+backend:
+  namespace: backend-dev
+  image: ghcr.io/bankmarkbenz/backend
+  tag: dev
+  replicas: 1
+  imagePullSecrets: registry
+  port: 8080
+  healthCheckPath: "/health"
+ingress:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  host: dev.bankandmark.codes
+  path: "/backend(/|$)(.*)"
+  serviceType: ClusterIP
+extraEnv:
+  COMMIT_SHA: CHANGEME
