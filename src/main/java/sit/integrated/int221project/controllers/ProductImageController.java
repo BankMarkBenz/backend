@@ -84,7 +84,8 @@ public class ProductImageController{
     public ResponseEntity<Object> changeImage(@RequestParam("File")MultipartFile file,@PathVariable("id")String id) {
         try{
             if(hasFoundId(parseInt(id))){
-                fos = new FileOutputStream( name+id);
+                fos = new FileOutputStream( IMAGEPATH +  name + id + Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf('.')));
+                System.out.println(name+id);
                 fos.write(file.getBytes());
                 fos.close();
                 return  new ResponseEntity<>("The File Change Successfully", HttpStatus.OK);
