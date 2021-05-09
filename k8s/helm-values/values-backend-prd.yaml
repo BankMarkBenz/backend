@@ -1,6 +1,6 @@
 backend:
   namespace: backend-prd
-  image: ghcr.io/BankMarkBenz/backend
+  image: ghcr.io/bankmarkbenz/backend
   tag: prd
   replicas: 1
   imagePullSecrets: registry

@@ -1,6 +1,6 @@
 backend:
   namespace: backend-uat
-  image: ghcr.io/BankMarkBenz/backend
+  image: ghcr.io/bankmarkbenz/backend
   tag: uat
   replicas: 1
   imagePullSecrets: registry
