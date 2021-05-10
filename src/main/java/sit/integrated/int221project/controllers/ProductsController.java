@@ -24,14 +24,14 @@ public class ProductsController {
     private ProductsRepository productsRepository;
 
     @GetMapping("/all")
-    public List<Products> listAllProducts(@RequestParam Optional<Integer> page,
+    public Page<Products> listAllProducts(@RequestParam Optional<Integer> page,
                                           @RequestParam Optional<String> sortBy){
         Page<Products> list = productsRepository.findAll(PageRequest.of(
                 page.orElse(0),
                 8,
                 Sort.Direction.ASC,
                 sortBy.orElse("productId")));
-        return list.getContent();
+        return list;
     }
 
     @GetMapping("/show/{id}")
